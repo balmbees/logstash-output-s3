@@ -279,7 +279,7 @@ class LogStash::Outputs::S3 < LogStash::Outputs::Base
   public
   def get_temporary_filename(page_counter = 0)
     current_time = Time.now
-    filename = "ls.s3.#{Socket.gethostname}.#{current_time.strftime("%Y-%m-%dT%H.%M")}"
+    filename = "#{current_time.strftime("%Y/%m/%d/T%H.%M")}-#{Socket.gethostname}"
 
     if @tags.size > 0
       return "#{filename}.tag_#{@tags.join('.')}.part#{page_counter}.#{get_tempfile_extension}"
