@@ -143,7 +143,8 @@ class LogStash::Outputs::S3 < LogStash::Outputs::Base
     # find and use the bucket
     bucket = @s3.buckets[@bucket]
 
-    remote_filename = "#{@prefix}#{File.basename(file)}"
+    current_time = Time.now
+    remote_filename = "#{@prefix}#{current_time.strftime("%Y/%m/%d/")}#{File.basename(file)}"
 
     @logger.debug("S3: ready to write file in bucket", :remote_filename => remote_filename, :bucket => @bucket)
 
@@ -279,7 +280,7 @@ class LogStash::Outputs::S3 < LogStash::Outputs::Base
   public
   def get_temporary_filename(page_counter = 0)
     current_time = Time.now
-    filename = "#{current_time.strftime("%Y/%m/%d/T%H.%M")}-#{Socket.gethostname}"
+    filename = "#{current_time.strftime("%Y-%m-%d-T%H.%M")}-#{Socket.gethostname}"
 
     if @tags.size > 0
       return "#{filename}.tag_#{@tags.join('.')}.part#{page_counter}.#{get_tempfile_extension}"
